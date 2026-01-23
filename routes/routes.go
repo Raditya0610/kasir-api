@@ -2,6 +2,7 @@ package routes
 
 import (
 	"kasir-api/controller"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -13,6 +14,9 @@ func SetupRouter() *gin.Engine {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	r.GET("/", func(ctx *gin.Context) {
+		ctx.Redirect(http.StatusFound, "/swagger/index.html")
+	})
 	// --- Category Routes ---
 	r.GET("/categories", controller.GetAllCategories)
 	r.POST("/categories", controller.CreateCategory)
