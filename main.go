@@ -18,7 +18,7 @@ import (
 func main() {
 
 	if err := godotenv.Load(); err != nil {
-		log.Fatal("env not loaded")
+		log.Println("env not loaded")
 	}
 	config.ConnectDatabase()
 
