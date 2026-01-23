@@ -13,7 +13,6 @@ import (
 // @title Kasir API
 // @version 1.0
 // @description Ini adalah API server untuk Kasir App tugas session 1.
-// @host localhost:8080
 // @BasePath /
 func main() {
 
