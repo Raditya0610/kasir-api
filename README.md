@@ -22,7 +22,7 @@ kasir-api/
 ├── docs/           # File generate Swagger documentation
 ├── models/         # Struct database (Schema)
 ├── routes/         # Definisi endpoint URL
-├── .env            # Environment variables (JANGAN DI-PUSH KE GIT)
+├── .env            # Environment variables (buat .env anda sendiri)
 ├── main.go         # Entry point aplikasi
 ├── go.mod          # Dependency manager
 └── README.md       # Dokumentasi project
