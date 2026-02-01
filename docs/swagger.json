@@ -1,4 +1,7 @@
 {
+    "schemes": [
+        "https"
+    ],
     "swagger": "2.0",
     "info": {
         "description": "API Server untuk aplikasi Kasir sederhana",
@@ -15,7 +18,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "kasir-api-production.up.railway.app",
     "basePath": "/",
     "paths": {
         "/categories": {

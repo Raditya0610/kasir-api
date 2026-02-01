@@ -36,7 +36,7 @@ definitions:
       updated_at:
         type: string
     type: object
-host: localhost:8080
+host: kasir-api-production.up.railway.app
 info:
   contact:
     email: support@swagger.io
@@ -242,4 +242,6 @@ paths:
       summary: Update produk
       tags:
       - Products
+schemes:
+- https
 swagger: "2.0"
