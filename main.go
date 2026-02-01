@@ -3,6 +3,7 @@ package main
 import (
 	"kasir-api/config"
 	"kasir-api/controller"
+	"kasir-api/docs"
 	"kasir-api/repository"
 	"kasir-api/routes"
 	"kasir-api/service"
@@ -55,7 +56,17 @@ func main() {
 	// 4. Run Server
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "8080" // Default port lokal
+	}
+
+	railwayDomain := os.Getenv("RAILWAY_PUBLIC_DOMAIN")
+
+	if railwayDomain != "" {
+		docs.SwaggerInfo.Host = railwayDomain
+		docs.SwaggerInfo.Schemes = []string{"https"}
+	} else {
+		docs.SwaggerInfo.Host = "localhost:" + port
+		docs.SwaggerInfo.Schemes = []string{"http"}
 	}
 	r.Run(":" + port)
 }
