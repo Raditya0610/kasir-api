@@ -7,10 +7,10 @@ import (
 )
 
 type Category struct {
-	ID          uint           `gorm:"primaryKey" json:"id"`
-	Name        string         `gorm:"type:varchar(100);not null" json:"name" binding:"required"`
-	Description string         `gorm:"type:text" json:"description"`
+	ID          uint           `json:"id"`
+	Name        string         `json:"name" binding:"required"`
+	Description string         `json:"description"`
 	CreatedAt   time.Time      `json:"created_at"`
 	UpdatedAt   time.Time      `json:"updated_at"`
-	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
+	DeletedAt   gorm.DeletedAt `json:"-"`
 }

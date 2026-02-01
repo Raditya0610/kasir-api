@@ -9,27 +9,28 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func SetupRouter() *gin.Engine {
+func SetupRouter(productCtrl *controller.ProductController, categoryCtrl *controller.CategoryController) *gin.Engine {
 	r := gin.Default()
 
+	// Swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.Redirect(http.StatusFound, "/swagger/index.html")
 	})
+
 	// --- Category Routes ---
-	r.GET("/categories", controller.GetAllCategories)
-	r.POST("/categories", controller.CreateCategory)
-	r.GET("/categories/:id", controller.GetCategoryByID)
-	r.PUT("/categories/:id", controller.UpdateCategory)
-	r.DELETE("/categories/:id", controller.DeleteCategory)
+	r.GET("/categories", categoryCtrl.GetAllCategories)
+	r.POST("/categories", categoryCtrl.CreateCategory)
+	r.GET("/categories/:id", categoryCtrl.GetCategoryByID)
+	r.PUT("/categories/:id", categoryCtrl.UpdateCategory)
+	r.DELETE("/categories/:id", categoryCtrl.DeleteCategory)
 
 	// --- Product Routes ---
-	r.GET("/products", controller.GetAllProducts)
-	r.POST("/products", controller.CreateProduct)
-	r.GET("/products/:id", controller.GetProductByID)
-	r.PUT("/products/:id", controller.UpdateProduct)
-	r.DELETE("/products/:id", controller.DeleteProduct)
+	r.GET("/products", productCtrl.GetAllProducts)
+	r.POST("/products", productCtrl.CreateProduct)
+	r.GET("/products/:id", productCtrl.GetProductByID)
+	r.PUT("/products/:id", productCtrl.UpdateProduct)
+	r.DELETE("/products/:id", productCtrl.DeleteProduct)
 
 	return r
 }

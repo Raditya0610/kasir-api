@@ -1,32 +1,31 @@
 package config
 
 import (
+	"database/sql"
 	"fmt"
-	"kasir-api/models"
+	"log"
 	"os"
 
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
-var DB *gorm.DB
+var DB *sql.DB
 
 func ConnectDatabase() {
-	dsn := fmt.Sprintf(
-		"host=%s user=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Jakarta password=%s",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_PASSWORD"),
-	)
-	fmt.Println("Connecting with DSN:", dsn)
-	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		print("Failed to connect to database!")
+	dsn := os.Getenv("DB_CONN")
+	if dsn == "" {
+		log.Fatal("DB_CONN is not set in environment variables")
 	}
 
-	database.AutoMigrate(&models.Category{}, &models.Product{})
+	var err error
+	DB, err = sql.Open("pgx", dsn)
+	if err != nil {
+		log.Fatalf("Failed to open database connection: %v", err)
+	}
 
-	DB = database
+	if err = DB.Ping(); err != nil {
+		log.Fatalf("Failed to ping database: %v", err)
+	}
+
+	fmt.Println("🚀 Connected to Supabase (via pgx) successfully!")
 }

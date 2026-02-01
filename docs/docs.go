@@ -9,7 +9,16 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -17,7 +26,6 @@ const docTemplate = `{
     "paths": {
         "/categories": {
             "get": {
-                "description": "Mengambil list semua kategori",
                 "produces": [
                     "application/json"
                 ],
@@ -38,7 +46,6 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Menambahkan data kategori ke database",
                 "consumes": [
                     "application/json"
                 ],
@@ -72,7 +79,6 @@ const docTemplate = `{
         },
         "/categories/{id}": {
             "get": {
-                "description": "Mengambil data kategori berdasarkan ID",
                 "produces": [
                     "application/json"
                 ],
@@ -99,7 +105,6 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Mengubah data kategori berdasarkan ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -138,7 +143,6 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Menghapus (soft delete) kategori berdasarkan ID",
                 "produces": [
                     "application/json"
                 ],
@@ -170,7 +174,6 @@ const docTemplate = `{
         },
         "/products": {
             "get": {
-                "description": "Mengambil list semua produk beserta kategorinya",
                 "produces": [
                     "application/json"
                 ],
@@ -191,7 +194,6 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Menambahkan data produk ke database dengan relasi kategori",
                 "consumes": [
                     "application/json"
                 ],
@@ -225,7 +227,6 @@ const docTemplate = `{
         },
         "/products/{id}": {
             "get": {
-                "description": "Mengambil data produk berdasarkan ID",
                 "produces": [
                     "application/json"
                 ],
@@ -252,7 +253,6 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Mengubah data produk berdasarkan ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -291,7 +291,6 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Menghapus (soft delete) produk berdasarkan ID",
                 "produces": [
                     "application/json"
                 ],
@@ -350,12 +349,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "category": {
-                    "description": "Relasi",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/models.Category"
-                        }
-                    ]
+                    "$ref": "#/definitions/models.Category"
                 },
                 "category_id": {
                     "type": "integer"
@@ -389,11 +383,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "",
+	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Kasir API",
-	Description:      "Ini adalah API server untuk Kasir App tugas session 1.",
+	Description:      "API Server untuk aplikasi Kasir sederhana",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",
