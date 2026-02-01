@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rs/cors"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -12,6 +13,7 @@ import (
 func SetupRouter(productCtrl *controller.ProductController, categoryCtrl *controller.CategoryController) *gin.Engine {
 	r := gin.Default()
 
+	r.Use(cors.Default())
 	// Swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/", func(ctx *gin.Context) {
