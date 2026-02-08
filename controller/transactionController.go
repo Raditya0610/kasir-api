@@ -39,3 +39,18 @@ func (h *TransactionController) HandleCheckout(c *gin.Context) {
 
 	c.JSON(http.StatusOK, transaction)
 }
+
+// GetDailyReport godoc
+// @Summary Get sales report for today
+// @Tags Reports
+// @Produce json
+// @Success 200 {object} models.SalesReport
+// @Router /report/hari-ini [get]
+func (h *TransactionController) GetDailyReport(c *gin.Context) {
+	report, err := h.service.GetDailyReport()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, report)
+}

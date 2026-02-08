@@ -8,6 +8,7 @@ import (
 
 type TransactionRepository interface {
 	CreateTransaction(items []models.CheckoutItem) (*models.Transaction, error)
+	GetSalesReport(startDate, endDate string) (models.SalesReport, error)
 }
 
 type transactionRepository struct {
@@ -84,4 +85,41 @@ func (repo *transactionRepository) CreateTransaction(items []models.CheckoutItem
 		TotalAmount: totalAmount,
 		Details:     details,
 	}, nil
+}
+
+func (repo *transactionRepository) GetSalesReport(startDate, endDate string) (models.SalesReport, error) {
+	var report models.SalesReport
+
+	// 1. Total Revenue & Total Transaksi
+	queryStats := `
+		SELECT COALESCE(SUM(total_amount), 0), COUNT(id)
+		FROM transactions
+		WHERE created_at >= $1 AND created_at <= $2
+	`
+	err := repo.db.QueryRow(queryStats, startDate, endDate).Scan(&report.TotalRevenue, &report.TotalTransaksi)
+	if err != nil {
+		return report, err
+	}
+
+	// 2. Produk Terlaris
+	queryBestSeller := `
+		SELECT p.name, SUM(td.quantity) as qty
+		FROM transaction_details td
+		JOIN products p ON td.product_id = p.id
+		JOIN transactions t ON td.transaction_id = t.id
+		WHERE t.created_at >= $1 AND t.created_at <= $2
+		GROUP BY p.name
+		ORDER BY qty DESC
+		LIMIT 1
+	`
+	err = repo.db.QueryRow(queryBestSeller, startDate, endDate).Scan(&report.ProdukTerlaris.Name, &report.ProdukTerlaris.QtyTerjual)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			report.ProdukTerlaris = models.BestSellingProduct{Name: "-", QtyTerjual: 0}
+		} else {
+			return report, err
+		}
+	}
+
+	return report, nil
 }

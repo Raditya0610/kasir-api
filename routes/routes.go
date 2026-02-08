@@ -36,6 +36,7 @@ func SetupRouter(productCtrl *controller.ProductController, categoryCtrl *contro
 
 	// --- Transaction Routes ---
 	r.POST("/checkout", transactionCtrl.HandleCheckout)
+	r.GET("/report/hari-ini", transactionCtrl.GetDailyReport)
 
 	return r
 }
