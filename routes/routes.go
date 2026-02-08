@@ -10,7 +10,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func SetupRouter(productCtrl *controller.ProductController, categoryCtrl *controller.CategoryController) *gin.Engine {
+func SetupRouter(productCtrl *controller.ProductController, categoryCtrl *controller.CategoryController, transactionCtrl *controller.TransactionController) *gin.Engine {
 	r := gin.Default()
 
 	r.Use(cors.Default())
@@ -33,6 +33,9 @@ func SetupRouter(productCtrl *controller.ProductController, categoryCtrl *contro
 	r.GET("/products/:id", productCtrl.GetProductByID)
 	r.PUT("/products/:id", productCtrl.UpdateProduct)
 	r.DELETE("/products/:id", productCtrl.DeleteProduct)
+
+	// --- Transaction Routes ---
+	r.POST("/checkout", transactionCtrl.HandleCheckout)
 
 	return r
 }

@@ -51,7 +51,12 @@ func main() {
 	productService := service.NewProductService(productRepo)
 	productCtrl := controller.NewProductController(productService)
 
-	r := routes.SetupRouter(productCtrl, categoryCtrl)
+	// --- Transaction Layer ---
+	transactionRepo := repository.NewTransactionRepository(config.DB)
+	transactionService := service.NewTransactionService(transactionRepo)
+	transactionCtrl := controller.NewTransactionController(transactionService)
+
+	r := routes.SetupRouter(productCtrl, categoryCtrl, transactionCtrl)
 
 	// 4. Run Server
 	port := os.Getenv("PORT")

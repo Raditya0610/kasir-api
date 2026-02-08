@@ -24,7 +24,8 @@ func NewProductController(service *service.ProductService) *ProductController {
 // @Success 200 {array} models.Product
 // @Router /products [get]
 func (h *ProductController) GetAllProducts(c *gin.Context) {
-	products, err := h.service.GetAll()
+	name := c.Query("name")
+	products, err := h.service.GetAll(name)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

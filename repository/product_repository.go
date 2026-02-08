@@ -8,7 +8,7 @@ import (
 )
 
 type ProductRepository interface {
-	FetchAll() ([]models.Product, error)
+	FetchAll(name string) ([]models.Product, error)
 	FetchByID(id int) (models.Product, error)
 	Store(product *models.Product) error
 	Update(product *models.Product) error
@@ -23,7 +23,7 @@ func NewProductRepository(db *sql.DB) *productRepository {
 	return &productRepository{db: db}
 }
 
-func (r *productRepository) FetchAll() ([]models.Product, error) {
+func (r *productRepository) FetchAll(name string) ([]models.Product, error) {
 	query := `
 		SELECT p.id, p.name, p.price, p.stock, p.category_id, p.created_at, p.updated_at,
 		       c.id, c.name
@@ -31,7 +31,14 @@ func (r *productRepository) FetchAll() ([]models.Product, error) {
 		JOIN categories c ON p.category_id = c.id
 		WHERE p.deleted_at IS NULL
 	`
-	rows, err := r.db.Query(query)
+
+	var args []interface{}
+	if name != "" {
+		query += " AND p.name ILIKE $1"
+		args = append(args, "%"+name+"%")
+	}
+
+	rows, err := r.db.Query(query, args...)
 	if err != nil {
 		return nil, err
 	}
