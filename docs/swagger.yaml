@@ -1,5 +1,12 @@
 basePath: /
 definitions:
+  models.BestSellingProduct:
+    properties:
+      nama:
+        type: string
+      qty_terjual:
+        type: integer
+    type: object
   models.Category:
     properties:
       created_at:
@@ -14,6 +21,20 @@ definitions:
         type: string
     required:
     - name
+    type: object
+  models.CheckoutItem:
+    properties:
+      product_id:
+        type: integer
+      quantity:
+        type: integer
+    type: object
+  models.CheckoutRequest:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/models.CheckoutItem'
+        type: array
     type: object
   models.Product:
     properties:
@@ -35,6 +56,43 @@ definitions:
         type: integer
       updated_at:
         type: string
+    type: object
+  models.SalesReport:
+    properties:
+      produk_terlaris:
+        $ref: '#/definitions/models.BestSellingProduct'
+      total_revenue:
+        type: integer
+      total_transaksi:
+        type: integer
+    type: object
+  models.Transaction:
+    properties:
+      created_at:
+        type: string
+      details:
+        items:
+          $ref: '#/definitions/models.TransactionDetail'
+        type: array
+      id:
+        type: integer
+      total_amount:
+        type: integer
+    type: object
+  models.TransactionDetail:
+    properties:
+      id:
+        type: integer
+      product_id:
+        type: integer
+      product_name:
+        type: string
+      quantity:
+        type: integer
+      subtotal:
+        type: integer
+      transaction_id:
+        type: integer
     type: object
 host: kasir-api-production.up.railway.app
 info:
@@ -146,6 +204,27 @@ paths:
       summary: Update kategori
       tags:
       - Categories
+  /checkout:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Checkout Data
+        in: body
+        name: checkout
+        required: true
+        schema:
+          $ref: '#/definitions/models.CheckoutRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Transaction'
+      summary: Checkout products
+      tags:
+      - Transactions
   /products:
     get:
       produces:
@@ -242,6 +321,18 @@ paths:
       summary: Update produk
       tags:
       - Products
+  /report/hari-ini:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SalesReport'
+      summary: Get sales report for today
+      tags:
+      - Reports
 schemes:
 - https
 swagger: "2.0"
